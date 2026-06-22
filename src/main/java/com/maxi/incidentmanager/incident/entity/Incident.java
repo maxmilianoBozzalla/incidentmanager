@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -34,6 +35,21 @@ public class Incident {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Severity severity;
+
+    @Column(name = "error_rate",precision = 10, scale = 2,  nullable = false)
+    private BigDecimal errorRate;
+
+    @Column(name = "request_count", nullable = false)
+    private Long requestCount;
+
+    @Column(name = "response_time", nullable = false)
+    private Long avgResponseTime;
+
+    /**
+     * Estimated number of affected users during the incident.
+     */
+    @Column(name = "impacted_user", nullable = false)
+    private Integer impactedUsers;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

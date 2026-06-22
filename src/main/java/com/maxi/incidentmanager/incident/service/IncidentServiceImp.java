@@ -5,6 +5,7 @@ import com.maxi.incidentmanager.analysis.entity.Analysis;
 import com.maxi.incidentmanager.analysis.mapper.AnalysisMapper;
 import com.maxi.incidentmanager.analysis.repository.AnalysisRepository;
 import com.maxi.incidentmanager.analysis.service.AnalysisServiceImp;
+import com.maxi.incidentmanager.analysis.service.SeverityCalculatorImp;
 import com.maxi.incidentmanager.history.mapper.IncidentHistoryMapper;
 import com.maxi.incidentmanager.incident.dto.CreateIncidentRequest;
 import com.maxi.incidentmanager.history.dto.IncidentHistoryResponse;
@@ -41,6 +42,7 @@ public class IncidentServiceImp implements IncidentService {
     private final IncidentMapper mapper;
     private final AnalysisMapper analysisMapper;
     private final AnalysisServiceImp analysisService;
+    private final SeverityCalculatorImp severityCalculator;
 
     @Override
     public IncidentResponse create(CreateIncidentRequest incident) {
@@ -50,10 +52,11 @@ public class IncidentServiceImp implements IncidentService {
 
         Incident incident1 = mapper.toEntity(incident);
         incident1.setBusinessService(businessService);
+        incident1.setSeverity(severityCalculator.calculateSeverity(incident1));
 
         incidentRepository.save(incident1);
-
         analysisService.analyze(incident1);
+
 
         return mapper.toDTOResponse(incident1);
     }
