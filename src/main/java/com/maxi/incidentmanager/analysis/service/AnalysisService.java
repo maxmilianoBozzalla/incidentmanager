@@ -8,5 +8,9 @@ public interface AnalysisService {
 
     AnalysisResponse analyze(Incident incident);
 
-    AnalysisResult evaluateRecurringIncident(Long serviceId);
+    boolean isRecurringIncident(Long serviceId);
+
+    boolean isHighImpactIncident(Incident incident);
+
+    boolean isFalsePositive(Incident incident);
 }

@@ -18,37 +18,11 @@ public class SeverityScoreCalculatorImp implements SeverityScoreCalculator {
         long requestCount = incident.getRequestCount();
         long avgResponseTime = incident.getAvgResponseTime();
         int impactedUsers = incident.getImpactedUsers();
-        log.info(
-                """
-                Incident Metrics:
-                  errorRate={}
-                  requestCount={}
-                  avgResponseTime={}
-                  impactedUsers={}
-                """,
-                errorRate,
-                requestCount,
-                avgResponseTime,
-                impactedUsers
-        );
 
         int scoreErrorRate = getScoreErrorRate(errorRate);
         int scoreRequestCount = getScoreRequestCount(requestCount);
         int scoreResponseTime = getScoreResponseTime(avgResponseTime);
         int scoreImpactedUsers = getScoreImpactedUser(impactedUsers);
-        log.info(
-                """
-                Severity Scores:
-                  errorRate={}
-                  requestCount={}
-                  responseTime={}
-                  impactedUsers={}
-                """,
-                scoreErrorRate,
-                scoreRequestCount,
-                scoreResponseTime,
-                scoreImpactedUsers
-        );
 
         return scoreErrorRate + scoreRequestCount + scoreResponseTime + scoreImpactedUsers;
     }

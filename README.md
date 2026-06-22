@@ -135,6 +135,8 @@ Actualmente el motor de análisis soporta:
 
 * `NEW_INCIDENT`
 * `RECURRING_INCIDENT`
+* `HIGH_IMPACT_INCIDENT`
+* `FALSE_POSITIVE`
 
 ## Reglas de Análisis
 
@@ -147,9 +149,23 @@ Configuración actual:
 * Ventana de análisis: 30 días.
 * Umbral de recurrencia: 3 incidentes.
 
+### Incidente de Alto Impacto
+
+Un incidente se considera de alto impacto cuando su severidad es:
+
+* HIGH
+* CRITICAL
+
+### Falso Positivo
+
+Un incidente se considera potencialmente falso positivo cuando cumple las siguientes condiciones:
+
+* Severity = LOW
+* Impacted Users < 5
+
 ### Incidente Nuevo
 
-Un incidente se considera nuevo cuando no supera el umbral de recurrencia definido para el servicio de negocio asociado.
+Un incidente se considera nuevo cuando no cumple ninguna de las reglas anteriores y no supera el umbral de recurrencia definido para el servicio de negocio asociado.
 
 ## Estructura Principal
 
@@ -286,10 +302,12 @@ GET /api/v1/incidents/{id}/analysis
 * [x] Motor de análisis automático.
 * [x] Detección de incidentes nuevos.
 * [x] Detección de incidentes recurrentes.
+* [x] Detección de incidentes de alto impacto.
+* [x] Detección de falsos positivos.
 
 ### Próximamente
 
-* [ ] Detección de falsos positivos.
+
 * [ ] Confidence Score.
 * [ ] Pesos dinámicos para métricas.
 * [ ] Análisis asistido por IA.

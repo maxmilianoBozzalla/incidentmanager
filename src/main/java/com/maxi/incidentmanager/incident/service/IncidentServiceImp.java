@@ -50,15 +50,15 @@ public class IncidentServiceImp implements IncidentService {
         BusinessService businessService = businessServiceRepository.findById(incident.businessServiceId())
                 .orElseThrow(BusinessServiceNotFoundException::new);
 
-        Incident incident1 = mapper.toEntity(incident);
-        incident1.setBusinessService(businessService);
-        incident1.setSeverity(severityCalculator.calculateSeverity(incident1));
+        Incident newIncident = mapper.toEntity(incident);
+        newIncident.setBusinessService(businessService);
+        newIncident.setSeverity(severityCalculator.calculateSeverity(newIncident));
 
-        incidentRepository.save(incident1);
-        analysisService.analyze(incident1);
+        incidentRepository.save(newIncident);
+        analysisService.analyze(newIncident);
 
 
-        return mapper.toDTOResponse(incident1);
+        return mapper.toDTOResponse(newIncident);
     }
 
     @Override
