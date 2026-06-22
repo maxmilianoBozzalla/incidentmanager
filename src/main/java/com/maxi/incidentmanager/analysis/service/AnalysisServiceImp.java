@@ -10,8 +10,8 @@ import com.maxi.incidentmanager.incident.repository.IncidentRepository;
 import com.maxi.incidentmanager.service.entity.BusinessService;
 import com.maxi.incidentmanager.service.exception.BusinessServiceNotFoundException;
 import com.maxi.incidentmanager.service.repository.BusinessServiceRepository;
-import com.maxi.incidentmanager.shared.constants.AnalysisConstants;
-import com.maxi.incidentmanager.shared.constants.AnalysisReasons;
+import com.maxi.incidentmanager.analysis.constants.AnalysisConstants;
+import com.maxi.incidentmanager.analysis.constants.AnalysisReasons;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

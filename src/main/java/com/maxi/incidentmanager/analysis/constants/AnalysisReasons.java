@@ -1,4 +1,4 @@
-package com.maxi.incidentmanager.shared.constants;
+package com.maxi.incidentmanager.analysis.constants;
 
 public class AnalysisReasons {
     public static final String RECURRING_INCIDENT_REASON = "Found recurring incidents in the last 30 days.";

@@ -1,4 +1,4 @@
-package com.maxi.incidentmanager.shared.constants;
+package com.maxi.incidentmanager.analysis.constants;
 
 public class AnalysisConstants {
     public static final int DAYS_TO_ANALYZE = 30;
