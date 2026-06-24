@@ -223,6 +223,28 @@ Resultado:
 
 Un incidente se considera nuevo cuando no cumple ninguna de las reglas anteriores y no supera el umbral de recurrencia definido para el servicio de negocio asociado.
 
+## Testing
+
+Actualmente el proyecto cuenta con pruebas unitarias para los principales motores de negocio.
+
+Cobertura actual:
+
+* ConfidenceScoreCalculator
+* SeverityCalculator
+* AnalysisService
+
+Las pruebas están implementadas utilizando:
+
+* JUnit 5
+* Mockito
+
+Objetivos de los tests:
+
+* Validar el cálculo de severidad.
+* Validar el cálculo de confidence score.
+* Validar las reglas de análisis.
+* Validar la persistencia de análisis.
+
 ## Estructura Principal
 
 * `application`: gestión de aplicaciones.
@@ -361,8 +383,13 @@ GET /api/v1/incidents/{id}/analysis
 
 ### Quality
 
-- [ ] Tests unitarios.
-- [ ] Tests de integración.
+- [x] Unit tests para Confidence Score.
+- [x] Unit tests para Severity Calculator.
+- [x] Primeros unit tests para Analysis Service.
+- [ ] Unit tests completos para Analysis Service.
+- [ ] Unit tests para Incident Service.
+- [ ] Repository tests.
+- [ ] Integration tests.
 
 ### Observability Platform
 

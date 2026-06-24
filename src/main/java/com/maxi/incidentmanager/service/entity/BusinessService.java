@@ -2,15 +2,13 @@ package com.maxi.incidentmanager.service.entity;
 
 import com.maxi.incidentmanager.application.entity.Application;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "services")
 public class BusinessService {
