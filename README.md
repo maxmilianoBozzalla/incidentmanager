@@ -69,6 +69,9 @@ BusinessService
 Incident
     ↓
 Analysis
+        ├── AnalysisResult
+        ├── Reason
+        └── ConfidenceScore
 
 Incident
     ↓
@@ -129,6 +132,46 @@ Cada métrica aporta una cantidad de puntos según los umbrales configurados.
 
 El puntaje total determina la severidad final del incidente.
 
+## Confidence Score
+
+El sistema calcula automáticamente un Confidence Score para cada análisis.
+
+Factores considerados:
+
+### Severidad
+
+| Severidad | Score |
+|------------|---------|
+| LOW | 10 |
+| MEDIUM | 20 |
+| HIGH | 30 |
+| CRITICAL | 40 |
+
+### Recurrencia
+
+| Estado | Score |
+|---------|---------|
+| No recurrente | 0 |
+| Recurrente | 30 |
+
+### Usuarios Impactados
+
+| Usuarios | Score |
+|------------|---------|
+| 0 - 10 | 5 |
+| 11 - 100 | 10 |
+| 101 - 500 | 20 |
+| 500+ | 30 |
+
+### Fórmula
+
+Confidence Score = Severity Score + Recurrence Score + Impacted Users Score
+
+Rango:
+
+* Mínimo: 15
+* Máximo: 100
+
 ## Resultados de Análisis
 
 Actualmente el motor de análisis soporta:
@@ -137,6 +180,11 @@ Actualmente el motor de análisis soporta:
 * `RECURRING_INCIDENT`
 * `HIGH_IMPACT_INCIDENT`
 * `FALSE_POSITIVE`
+
+Cada resultado incluye:
+
+* Motivo del análisis.
+* Confidence Score.
 
 ## Reglas de Análisis
 
@@ -156,12 +204,20 @@ Un incidente se considera de alto impacto cuando su severidad es:
 * HIGH
 * CRITICAL
 
+Resultado:
+
+* `HIGH_IMPACT_INCIDENT`
+
 ### Falso Positivo
 
 Un incidente se considera potencialmente falso positivo cuando cumple las siguientes condiciones:
 
 * Severity = LOW
 * Impacted Users < 5
+
+Resultado:
+
+* `FALSE_POSITIVE`
 
 ### Incidente Nuevo
 
@@ -281,41 +337,47 @@ GET /api/v1/incidents/{id}/analysis
 
 ```json
 {
-  "analysisResult": "RECURRING_INCIDENT",
-  "reason": "Found recurring incidents in the last 30 days.",
-  "createdAt": "2026-06-21T16:18:14"
+  "analysisResult": "HIGH_IMPACT_INCIDENT",
+  "reason": "Incident has significant business impact based on its severity and operational metrics.",
+  "confidenceScore": 80,
+  "createdAt": "2026-06-24T10:15:00"
 }
 ```
 
 ## Roadmap
 
-### Completado
+### Core Platform
 
-* [x] Gestión de aplicaciones.
-* [x] Gestión de servicios de negocio.
-* [x] Gestión de incidentes.
-* [x] Historial de incidentes.
-* [x] Cambio de estado.
-* [x] Motor de severidad.
-* [x] Severity Score.
-* [x] Clasificación automática de severidad.
-* [x] Motor de análisis automático.
-* [x] Detección de incidentes nuevos.
-* [x] Detección de incidentes recurrentes.
-* [x] Detección de incidentes de alto impacto.
-* [x] Detección de falsos positivos.
+- [x] Gestión de incidentes.
+- [x] Historial de incidentes.
+- [x] Cambio de estado.
+- [x] Motor de severidad.
+- [x] Motor de análisis.
+- [x] Confidence Score.
+- [x] Detección de incidentes nuevos.
+- [x] Detección de incidentes recurrentes.
+- [x] Detección de incidentes de alto impacto.
+- [x] Detección de falsos positivos.
 
-### Próximamente
+### Quality
 
+- [ ] Tests unitarios.
+- [ ] Tests de integración.
 
-* [ ] Confidence Score.
-* [ ] Pesos dinámicos para métricas.
-* [ ] Análisis asistido por IA.
-* [ ] Integración con Dynatrace.
-* [ ] Integración con Jira.
-* [ ] Dashboard de observabilidad.
-* [ ] Métricas históricas por servicio.
-* [ ] Reportes de incidentes.
+### Observability Platform
+
+- [ ] Agent propio (OneAgent simplificado).
+- [ ] Recolección de métricas.
+- [ ] Detección automática de incidentes.
+- [ ] Correlación de eventos.
+- [ ] Alerting.
+
+### Intelligence
+
+- [ ] Confidence Score avanzado.
+- [ ] Root Cause Analysis.
+- [ ] Análisis asistido por IA.
+- [ ] Recomendaciones automáticas.
 
 ## Notas
 

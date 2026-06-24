@@ -30,6 +30,9 @@ public class Analysis {
 
     private String reason;
 
+    @Column(name = "confidence_score", nullable = false)
+    private int confidenceScore;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

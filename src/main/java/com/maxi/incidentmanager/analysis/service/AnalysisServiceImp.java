@@ -8,21 +8,18 @@ import com.maxi.incidentmanager.analysis.repository.AnalysisRepository;
 import com.maxi.incidentmanager.incident.entity.Incident;
 import com.maxi.incidentmanager.incident.entity.Severity;
 import com.maxi.incidentmanager.incident.repository.IncidentRepository;
-import com.maxi.incidentmanager.service.repository.BusinessServiceRepository;
 import com.maxi.incidentmanager.analysis.constants.AnalysisConstants;
 import com.maxi.incidentmanager.analysis.constants.AnalysisReasons;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AnalysisServiceImp implements AnalysisService {
 
-    private final BusinessServiceRepository businessServiceRepository;
+    private final ConfidenceScoreCalculatorImp confidenceScoreCalculator;
     private final IncidentRepository incidentRepository;
     private final AnalysisRepository analysisRepository;
     private final AnalysisMapper analysisMapper;
@@ -31,17 +28,19 @@ public class AnalysisServiceImp implements AnalysisService {
     public AnalysisResponse analyze(Incident incident) {
 
         AnalysisResult analysisResult;
+        Long idService = incident.getBusinessService().getId();
+        boolean isRecurrentService = isRecurringIncident(idService);
         String reason = "";
 
         if (isHighImpactIncident(incident)) {
             analysisResult = AnalysisResult.HIGH_IMPACT_INCIDENT;
             reason = AnalysisReasons.HIGH_IMPACT_INCIDENT_REASON;
 
-        } else if (isRecurringIncident(incident.getBusinessService().getId())) {
+        } else if (isRecurrentService) {
             analysisResult = AnalysisResult.RECURRING_INCIDENT;
             reason = AnalysisReasons.RECURRING_INCIDENT_REASON;
 
-        } else if(isFalsePositive(incident)){
+        } else if (isFalsePositive(incident)) {
             analysisResult = AnalysisResult.FALSE_POSITIVE;
             reason = AnalysisReasons.FALSE_POSITIVE_REASON;
 
@@ -50,10 +49,15 @@ public class AnalysisServiceImp implements AnalysisService {
             reason = AnalysisReasons.NEW_INCIDENT_REASON;
         }
 
+        int scoreConfidence = confidenceScoreCalculator.confidenceCalculate(incident,
+                isRecurrentService);
+
         Analysis analysis = Analysis.builder()
                 .incident(incident)
                 .analysisResult(analysisResult)
-                .reason(reason).build();
+                .reason(reason)
+                .confidenceScore(scoreConfidence)
+                .build();
 
         analysisRepository.save(analysis);
 

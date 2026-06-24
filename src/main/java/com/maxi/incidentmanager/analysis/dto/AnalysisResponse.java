@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 public record AnalysisResponse(
         AnalysisResult analysisResult,
         String reason,
+        int confidenceScore,
         LocalDateTime createdAt
 ) {
 }
